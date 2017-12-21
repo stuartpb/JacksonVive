@@ -99,6 +99,8 @@ module bracket(flip) {
         }
         translate([-bracket_width/2, -buckle_gauge, buckle_gauge])
           cube([bracket_width, buckle_gauge, buckle_gauge]);
+        translate([-bracket_width/4, -buckle_gauge*2, buckle_gauge])
+          cube([bracket_width/2, buckle_gauge, buckle_gauge]);
         translate([-bracket_width/2,-bracket_depth/2,bracket_depth/2]) rotate([0,90,0])
           cylinder(d=buckle_gauge, h=bracket_width);
       }
