@@ -6,7 +6,7 @@
 
 /* [Configuration] */
 
-part = "both"; // [left:Left Bracket,right:Right Bracket,both:Both Brackets]
+part = "left"; // [left:Left Bracket,right:Right Bracket,both:Both Brackets]
 
 /* [Parameters] */
 
@@ -26,7 +26,7 @@ bracket_depth = 5;
 buckle_gauge = 2.5;
 
 // The angle of the pivot stop peg to the headset
-pivot_stop_peg_angle = 25;
+pivot_stop_peg_angle = 0;
 
 // the width of the arm that attaches to the pivot stop peg
 pivot_stop_arm_width = 10;
