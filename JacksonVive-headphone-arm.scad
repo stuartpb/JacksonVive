@@ -42,11 +42,13 @@ endstop_carveout = 1;
 
 endstop_carveout_length = 5;
 
-detente_width = 1.5;
+notch_width = 1;
 
-detente_spacing = 2;
+notch_spacing = 2.5;
 
-detente_depth = 0.5;
+notch_depth = 0.25;
+
+notch_start = 7;
 
 /* [Tweaks] */
 
@@ -74,9 +76,15 @@ module headphone_arm(flip) {
           cylindric_bend([arm_width, arm_length, arm_thickness], arm_length*arm_bend_factor)
       
             // define the flat arm within positive coordinate space
-            translate([arm_width/2,0,arm_thickness]) rotate([-90,0,0]) intersection () {
-              scale([1, 2*arm_thickness/arm_width, 1]) cylinder(d=arm_width, h=arm_length);
-              translate([-arm_width/2,0,0]) cube([arm_width, arm_thickness, arm_length]);
+            translate([arm_width/2,0,arm_thickness]) rotate([-90,0,0]) difference() {
+              intersection () {
+                scale([1, 2*arm_thickness/arm_width, 1]) cylinder(d=arm_width, h=arm_length);
+                translate([-arm_width/2,0,0]) cube([arm_width, arm_thickness, arm_length]);
+              }
+              for (stop = [notch_start : notch_spacing : arm_length] ) {
+                translate([0,notch_depth/2,stop])
+                  cube([arm_width,notch_depth,notch_width],center=true);
+              }
           }
     }
     // clip cutout
