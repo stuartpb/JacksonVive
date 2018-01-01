@@ -13,7 +13,7 @@ part = "left"; // [left:Left Arm,right:Right Arm,both:Both Arms]
 /* [Parameters] */
 
 // The angle of the arm from the headgear, in degrees.
-arm_angle = 30;
+arm_angle = 60;
 
 clip_thickness = 2;
 
@@ -63,11 +63,20 @@ module headphone_arm(flip) {
       translate([-clip_width/2,-headstrap_width,0])
         cube([clip_width, headstrap_width + clip_thickness, arm_width]);
       translate([arm_thickness/2,clip_thickness,0]) cylinder(d=top_width, h=arm_width);
-      translate([clip_width,0,arm_width]) rotate([180-arm_angle,90,0])
-        cylindric_bend([arm_width, arm_length, arm_thickness], arm_length*arm_bend_factor)
-          translate([arm_width/2,0,arm_thickness]) rotate([-90,0,0]) intersection () {
-            scale([1, 2*arm_thickness/arm_width, 1]) cylinder(d=arm_width, h=arm_length);
-            translate([-arm_width/2,0,0]) cube([arm_width, arm_thickness, arm_length]);
+      
+      // pivot the arm around the center of the top cylinder
+      translate([arm_thickness/2,clip_thickness,0]) rotate([0,0,-arm_angle])
+      
+        // move the arm out of bend-space and into rotation orientation
+        translate([top_width/3,arm_thickness,arm_width]) rotate([90,90,0])
+      
+          // bend the arm
+          cylindric_bend([arm_width, arm_length, arm_thickness], arm_length*arm_bend_factor)
+      
+            // define the flat arm within positive coordinate space
+            translate([arm_width/2,0,arm_thickness]) rotate([-90,0,0]) intersection () {
+              scale([1, 2*arm_thickness/arm_width, 1]) cylinder(d=arm_width, h=arm_length);
+              translate([-arm_width/2,0,0]) cube([arm_width, arm_thickness, arm_length]);
           }
     }
     // clip cutout
