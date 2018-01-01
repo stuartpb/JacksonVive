@@ -62,14 +62,18 @@ top_width = clip_width + arm_thickness;
 module headphone_arm(flip) {
   mirror([flip, 0, 0]) difference() {
     union () {
+      intersection() {
+        hull () {
+          translate([0,clip_thickness,0])
+            cylinder(d=clip_width, h=arm_width);
+          translate([clip_width/2,clip_thickness,arm_width/2])
+            sphere(d=arm_width);
+        }
+        translate([-top_width/2+arm_thickness/2,clip_thickness,0])
+          cube([top_width, top_width/2, arm_width]);
+      }
       translate([-clip_width/2,-headstrap_width,0])
         cube([clip_width, headstrap_width + clip_thickness, arm_width]);
-      difference() {
-        translate([arm_thickness/2,clip_thickness,0])
-          cylinder(d=top_width, h=arm_width);
-        translate([arm_thickness/2,clip_thickness,0])
-          rotate([0,0,arm_angle-90]) translate([top_width/2-arm_thickness,-top_width/2+arm_thickness,0]) cube([top_width/2, top_width/2-arm_thickness/2, arm_width]);
-      }
       
       // pivot the arm around the center of the top cylinder
       translate([arm_thickness/2,clip_thickness,0]) rotate([0,0,arm_angle])
