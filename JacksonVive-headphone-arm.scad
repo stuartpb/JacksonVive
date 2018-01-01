@@ -13,7 +13,7 @@ part = "left"; // [left:Left Arm,right:Right Arm,both:Both Arms]
 /* [Parameters] */
 
 // The angle of the arm from the headgear, in degrees.
-arm_angle = 60;
+arm_angle = 30;
 
 clip_thickness = 2;
 
@@ -67,10 +67,10 @@ module headphone_arm(flip) {
       translate([arm_thickness/2,clip_thickness,0]) cylinder(d=top_width, h=arm_width);
       
       // pivot the arm around the center of the top cylinder
-      translate([arm_thickness/2,clip_thickness,0]) rotate([0,0,-arm_angle])
+      translate([arm_thickness/2,clip_thickness,0]) rotate([0,0,arm_angle])
       
         // move the arm out of bend-space and into rotation orientation
-        translate([top_width/3,arm_thickness,arm_width]) rotate([90,90,0])
+        translate([top_width/2,0,arm_width]) rotate([180,90,0])
       
           // bend the arm
           cylindric_bend([arm_width, arm_length, arm_thickness], arm_length*arm_bend_factor)
