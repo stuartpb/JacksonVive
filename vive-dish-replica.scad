@@ -1,8 +1,6 @@
 //!OpenSCAD
-// title      : JacksonVive Bracket - failed iteration
+// title      : Vive headset hinge cover facsimle
 // author     : Stuart P. Bentley (@stuartpb)
-// version    : 0.1.0
-// file       : JacksonVive-bracket.scad
 
 // # Configuration constants
 
@@ -15,6 +13,14 @@ right = false;
 // # Defined constants
 
 // These values are arbitrary
+
+$fn = 180;
+// How wide to make the support tabs.
+support_tab_width = 1;
+// How much the support tabs should touch the edges.
+support_interface_contact = 0.5;
+// How much space should be between support tabs and the part (outside of contact).
+support_interface_space = 0.2;
 
 // # Measured constants
 
@@ -45,37 +51,48 @@ module Vive_dish() {
   union() {
     linear_extrude (Vive_dish_depth) {
       difference () {
-        circle(d=Vive_dish_outerRingDiameter);
-        circle(r=Vive_dish_outerRingRadius-Vive_dish_outerRingThickness);
+        circle(d = Vive_dish_outerRingDiameter);
+        circle(r = Vive_dish_outerRingRadius - Vive_dish_outerRingThickness);
       }
       difference () {
-        circle(r=Vive_dish_innerRingRadius+Vive_dish_innerRingThickness);
-        circle(d=Vive_dish_innerRingDiameter);
+        circle(r = Vive_dish_innerRingRadius + Vive_dish_innerRingThickness);
+        circle(d = Vive_dish_innerRingDiameter);
       }
-      translate([-Vive_dish_innerRingThickness/2,-Vive_dish_innerRingRadius])
-        square([Vive_dish_innerRingThickness,Vive_dish_innerGraspLength]);
-      translate([-Vive_dish_innerRingThickness/2,Vive_dish_innerRingRadius-Vive_dish_innerGraspLength])
-        square([Vive_dish_innerRingThickness,Vive_dish_innerGraspLength]);
+      translate([
+        -Vive_dish_innerRingThickness/2,
+        -Vive_dish_innerRingRadius])
+        square([Vive_dish_innerRingThickness, Vive_dish_innerGraspLength]);
+      translate([
+        -Vive_dish_innerRingThickness/2,
+        Vive_dish_innerRingRadius - Vive_dish_innerGraspLength])
+        square([Vive_dish_innerRingThickness, Vive_dish_innerGraspLength]);
     }
     intersection () {
       union () { 
         linear_extrude (Vive_dish_tabHeight) {
           difference () {
-            circle(d=Vive_dish_innerRingDiameter);
-            circle(r=Vive_dish_innerRingRadius-Vive_dish_innerRingThickness);
+            circle(d = Vive_dish_innerRingDiameter);
+            circle(r = Vive_dish_innerRingRadius - Vive_dish_innerRingThickness);
           }
         }
-        translate([0,0,Vive_dish_tabHeight-Vive_dish_innerRingThickness]) linear_extrude (Vive_dish_innerRingThickness) {
-          difference () {
-            circle(d=Vive_dish_innerRingDiameter);
-            circle(r=Vive_dish_innerRingRadius-Vive_dish_tabOverhang);
+        translate([0, 0, Vive_dish_tabHeight - Vive_dish_innerRingThickness])
+          linear_extrude (Vive_dish_innerRingThickness) {
+            difference () {
+              circle(d = Vive_dish_innerRingDiameter);
+              circle(r = Vive_dish_innerRingRadius - Vive_dish_tabOverhang);
+            }
           }
-        }
       }
-      linear_extrude (Vive_dish_tabHeight) square([Vive_dish_outerRingDiameter,Vive_dish_tabWidth],center=true);
+      linear_extrude (Vive_dish_tabHeight)
+        square(center = true, [Vive_dish_outerRingDiameter, Vive_dish_tabWidth]);
     }
   }
 }
 
-translate([0,0,2]) Vive_dish();
-linear_extrude(2) union() {circle(d=Vive_dish_outerRingDiameter); translate([0,-Vive_dish_outerRingRadius]) square([Vive_dish_outerRingDiameter,25],center=true);}
+translate([0, 0, 2]) Vive_dish();
+linear_extrude(2) union() {
+  circle(d = Vive_dish_outerRingDiameter);
+  translate([0, -Vive_dish_outerRingRadius])
+    square(center = true,
+      [Vive_dish_outerRingDiameter, Vive_dish_outerRingDiameter]);
+}
