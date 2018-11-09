@@ -2,14 +2,6 @@
 // title      : Vive headset hinge cover facsimle
 // author     : Stuart P. Bentley (@stuartpb)
 
-// # Configuration constants
-
-// These values are redefined for different configurations
-// (ie. rendering the right bracket).
-
-// Whether the 
-right = false;
-
 // # Defined constants
 
 // These values are arbitrary
@@ -43,11 +35,21 @@ Vive_dish_tabHeight = 7;
 Vive_dish_innerRingRadius = Vive_dish_innerRingDiameter / 2;
 Vive_dish_outerRingRadius = Vive_dish_outerRingDiameter / 2;
 
-module reflected () {
-  mirror([0, right ? 1 : 0, 0]) children();
+module Vive_dish_support() {
+  intersection () {
+    linear_extrude (Vive_dish_tabHeight) square(center = true,
+        [Vive_dish_outerRingDiameter,
+          Vive_dish_tabWidth]);
+    translate([0,0,support_interface_space]) linear_extrude (Vive_dish_tabHeight-Vive_dish_innerRingThickness-2*support_interface_space) difference () {
+      circle(r= Vive_dish_innerRingRadius - Vive_dish_innerRingThickness - 
+        (Vive_dish_tabOverhang - Vive_dish_innerRingThickness -
+          support_interface_contact));
+      circle(r=Vive_dish_innerRingRadius - Vive_dish_tabOverhang);
+    }
+  }
 }
 
-module Vive_dish() {
+module Vive_dish(support = true) {
   union() {
     linear_extrude (Vive_dish_depth) {
       difference () {
@@ -86,10 +88,13 @@ module Vive_dish() {
       linear_extrude (Vive_dish_tabHeight)
         square(center = true, [Vive_dish_outerRingDiameter, Vive_dish_tabWidth]);
     }
+    if (support) Vive_dish_support();
   }
 }
 
-translate([0, 0, 2]) Vive_dish();
+translate([0, 0, 2]) union() {
+  Vive_dish();
+}
 linear_extrude(2) union() {
   circle(d = Vive_dish_outerRingDiameter);
   translate([0, -Vive_dish_outerRingRadius])
